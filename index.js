@@ -1,28 +1,13 @@
-/**
- * @file index
- * @author shuai.li
- */
-
 import reducer from '../G';
 const {createStore} = require('redux.js');
 const store = createStore(reducer);
 
-// 重写 aPP
-const _App=App;
-
-App=(config)=>{
-  const newConfig ={
-    ...config,
-    store
-  }
-  return _App(newConfig)
-}
-
 const {getState,dispatch,subscribe} =store;
 
-subscribe(()=>{
-  console.log(getState())
-})
+// subscribe(()=>{
+//   console.log(getState())
+// })
+
 const state =getState();
 const _Page = Page;
 
@@ -42,8 +27,6 @@ function processNewConfig(config){
         [item]: state[item],
       }
     },{})
-
-
   }
   newConfig.data={
     ...config.data,
@@ -89,9 +72,6 @@ function setSubscribe(options, config){
     config.states.forEach((s)=>{
       updateObj[s]=newState[s]
     });
-    // _Page.prototype.setData.call(newConfig,{
-    //   ...updateObj,
-    // })
     this.setData(updateObj)
   });
 }
@@ -99,6 +79,5 @@ function setSubscribe(options, config){
 Page = (config) => {
   const newConfig = processNewConfig(config)
   proxyPage(newConfig, 'onLoad', setSubscribe);
-
   _Page(newConfig);
 };
