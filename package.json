@@ -1,0 +1,38 @@
+{
+  "name": "wx-redux",
+  "version": "1.0.0",
+  "description": "微信小程序状态管理框架wx-redux",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/18boys/wx-redux.git"
+  },
+  "author": "shuai.li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/18boys/wx-redux/issues"
+  },
+  "homepage": "https://github.com/18boys/wx-redux#readme",
+  "keywords": [
+    "weixin",
+    "redux",
+    "微信",
+    "小程序",
+    "状态管理"
+  ],
+  "dependencies": {
+    "redux": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.1",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}

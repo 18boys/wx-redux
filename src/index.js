@@ -1,24 +1,30 @@
-import reducer from '../G';
-const {createStore} = require('redux.js');
-const store = createStore(reducer);
+/**
+ * @file wx-redux
+ * @author shuai.li
+ */
 
-const {getState,dispatch,subscribe} =store;
+import { proxyPage } from './utils';
 
-// subscribe(()=>{
-//   console.log(getState())
-// })
-
-const state =getState();
 const _Page = Page;
+let Store;
+
+const _app=App;
+App=(config)=>{
+  if(!config.store){
+    throw new Error('请在App中初始化一个store!!!')
+  }
+  Store=config.store;
+  return _app(config)
+};
 
 function processNewConfig(config){
   let newConfig=config;
   newConfig.data = config.data||{};
-
   // 映射states
   let states=[];
+  const state = Store.getState();
   if(config.states){
-    states=config.states.reduce((pre,item)=> {
+    states= config.states.reduce((pre,item)=> {
       if(!state.hasOwnProperty(item)){
         throw  new Error(`states 中没有定义${item}`)
       }
@@ -35,7 +41,7 @@ function processNewConfig(config){
 
   // 映射action
   if(config.actions){
-
+    const {dispatch} = Store;
     // todo 判断action是否为函数
     config.actions.map((action)=>{
       newConfig[action.name]=function (...args){
@@ -46,38 +52,31 @@ function processNewConfig(config){
   return newConfig;
 }
 
-const proxyPage = function (config, methodName, hookMethod) {
-  if (config[methodName]) {
-    const oldMethod = config[methodName];
-    config[methodName] = function (options) {
-      hookMethod.call(this, options, config);
-      oldMethod.call(this, options)
-    };
-    return;
-  }
-  config[methodName] = function (options) {
-    hookMethod.call(this, options, config)
-  }
-};
-
-// z在此方法中才拿到this, 然后才可以调用  setData
 function setSubscribe(options, config){
   // 在此处订阅所有变化,并根据变化更新页面
+  const { subscribe } = Store;
   subscribe(()=>{
     // todo 在这里可以做diff,然后确定到底需要更新那个页面的那个部分
     // 此处有性能优化的两个点: 1.json-diff 2.不正在显示的页面不更新state
+    const { getState } = Store;
     const newState = getState();
     const updateObj={};
     // todo 此处可以做优化,让用户可以按照 a.b.c.d类似的方式来更新state
     config.states.forEach((s)=>{
       updateObj[s]=newState[s]
     });
+    // 此处的this实际上指向是 Page对象
     this.setData(updateObj)
   });
 }
 
+function con(){
+  console.log('hahah')
+}
+
 Page = (config) => {
-  const newConfig = processNewConfig(config)
+  const newConfig = processNewConfig(config);
   proxyPage(newConfig, 'onLoad', setSubscribe);
+  proxyPage(newConfig, 'onLoad', con);
   _Page(newConfig);
 };
