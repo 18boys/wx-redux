@@ -32,6 +32,7 @@
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.1",
     "babel-loader": "^8.0.5",
+    "copy-webpack-plugin": "^5.0.1",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   }

@@ -4,19 +4,31 @@
  */
 
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
     'wx-redux': './src/index.js',
-    redux: './node_modules/redux',
   },
   output: {
     filename:'[name].js',
     path: path.resolve(__dirname, 'dist')
   },
+  plugins: [
+    new CopyPlugin([
+      {
+        from: 'node_modules/redux/dist/redux.min.js',
+        to: 'redux.js'
+      }
+    ]),
+  ],
   module: {
     rules: [
-      { test: /\.js$/, loader: "babel-loader" }
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader",
+      }
     ]
   }
 };
