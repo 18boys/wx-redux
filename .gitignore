@@ -1,7 +1,6 @@
 # kdiff3 ignore
 *.orig
 # maven ignore
-dist/
 distAli/
 mock/
 target/
