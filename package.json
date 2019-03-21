@@ -33,6 +33,9 @@
     "@babel/preset-env": "^7.4.1",
     "babel-loader": "^8.0.5",
     "copy-webpack-plugin": "^5.0.1",
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   }

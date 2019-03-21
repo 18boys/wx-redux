@@ -1,0 +1,47 @@
+# kdiff3 ignore
+*.orig
+# maven ignore
+distAli/
+mock/
+target/
+mock/
+node_modules/
+.vscode/
+./yarn.lock
+# eclipse ignore
+.settings/
+.project
+.classpath
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+# system ignore
+.DS_Store
+Thumbs.db
+# package ignore (optional)
+# *.jar
+# *.war
+# *.zip
+# *.tar
+# *.tar.gz
+.happypack/
+.lib_cache/
+.eslintstatus
+.eslintcache
+.prepushcache
+package-lock.json
+jsconfig.json
+typings/
+lockhb.py
+project.config.json
+.jshintrc
+map
+
