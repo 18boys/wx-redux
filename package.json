@@ -2,7 +2,7 @@
   "name": "wx-redux",
   "version": "1.0.0",
   "description": "微信小程序状态管理框架wx-redux",
-  "main": "dist/main.js",
+  "main": "dist/wx-redux.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
