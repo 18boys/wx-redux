@@ -70,13 +70,8 @@ function setSubscribe(options, config){
   });
 }
 
-function con(){
-  console.log('hahah')
-}
-
 Page = (config) => {
   const newConfig = processNewConfig(config);
   proxyPage(newConfig, 'onLoad', setSubscribe);
-  proxyPage(newConfig, 'onLoad', con);
   _Page(newConfig);
 };
