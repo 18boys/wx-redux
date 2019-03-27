@@ -2,4 +2,8 @@
   <view>{{a}}</view>
   <view class="section__title">你输入的是：{{title}}</view>
   <input bindinput="bindKeyInput" placeholder="请在此处输入" />
+  <bottom-buttons
+    confirm="增加"
+    cancel="减少"
+  />
 </view>

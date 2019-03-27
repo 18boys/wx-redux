@@ -5,7 +5,6 @@
 
 import { proxyPage } from './utils';
 
-const _Page = Page;
 let Store;
 
 const _app=App;
@@ -17,7 +16,7 @@ App=(config)=>{
   return _app(config)
 };
 
-function processNewConfig(config){
+function processNewConfig(config, isProcessComponent=false){
   let newConfig=config;
   newConfig.data = config.data||{};
   // 映射states
@@ -44,6 +43,13 @@ function processNewConfig(config){
     const {dispatch} = Store;
     // todo 判断action是否为函数
     config.actions.map((action)=>{
+      if(isProcessComponent){
+        if(!newConfig.methods) newConfig.methods={};
+        newConfig.methods[action.name]=function (...args){
+          dispatch(action.apply(null,args))
+        };
+        return;
+      }
       newConfig[action.name]=function (...args){
         dispatch(action.apply(null,args))
       }
@@ -66,12 +72,30 @@ function setSubscribe(options, config){
       updateObj[s]=newState[s]
     });
     // 此处的this实际上指向是 Page对象
+    console.log(this)
     this.setData(updateObj)
   });
 }
 
+const _Page = Page;
 Page = (config) => {
   const newConfig = processNewConfig(config);
   proxyPage(newConfig, 'onLoad', setSubscribe);
   _Page(newConfig);
 };
+
+const _Component = Component;
+Component = (config) => {
+  const newConfig = processNewConfig(config,true);
+  // todo 在页面和组件的卸载阶段需要将listen给去掉,防止无用的页面刷新
+  if(newConfig.lifetimes){
+    // 注意这块this的绑定
+    proxyPage(newConfig.lifetimes, 'attached', function(options){setSubscribe.call(this,options,newConfig)});
+  }else {
+    // 加入自动化测试,方便测试写的逻辑没有问题
+    proxyPage(newConfig, 'attached', setSubscribe);
+  }
+  console.log('newConfig',newConfig)
+  _Component(newConfig);
+};
+

@@ -1,0 +1,9 @@
+<view class="button-wrapper" >
+  <view class="button-cancel" bindtap="handleCancel">{{cancel}}</view>
+  <view class="button-confirm" bindtap="handleConfirm">{{confirm}}</view>
+</view>
+<view>增加或者减少之后的值: {{count}}</view>
+<bottom-buttons
+  type="default"
+  bindtap="onclickButton"
+>haha</bottom-buttons>

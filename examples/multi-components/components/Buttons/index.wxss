@@ -1,0 +1,25 @@
+.button-wrapper{
+  display: flex;
+  border-bottom: 1rpx #E5E5E5 solid;
+  border-top: 1rpx #E5E5E5 solid;
+}
+.button-cancel{
+  display: flex;
+  font-size: 32rpx;
+  padding: 28rpx 0;
+  color: #333;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+.button-confirm{
+  display: flex;
+  font-size: 36rpx;
+  padding: 28rpx 0;
+  color: #fff;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #FF5000;
+}

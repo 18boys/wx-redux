@@ -1,4 +1,4 @@
-import {updateTitle} from '../../actions/index';
+import {updateTitle,add,subject} from '../../actions/index';
 Page({
   data:{
     a:'aaa',

@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "测试wx-redux",
-  "usingComponents": {}
+  "usingComponents": {
+    "bottom-buttons": "../../components/Buttons/index"
+  }
 }
