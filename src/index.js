@@ -3,7 +3,7 @@
  * @author shuai.li
  */
 
-import { proxyPage } from './utils';
+import { proxyPage, getType } from './utils';
 
 let Store;
 
@@ -16,6 +16,7 @@ App=(config)=>{
   return _app(config)
 };
 
+// todo 现在是过程式的写法,考虑改成面向对象的写法
 function processNewConfig(config, isProcessComponent=false){
   let newConfig=config;
   newConfig.data = config.data||{};
@@ -61,7 +62,7 @@ function processNewConfig(config, isProcessComponent=false){
 function setSubscribe(options, config){
   // 在此处订阅所有变化,并根据变化更新页面
   const { subscribe } = Store;
-  subscribe(()=>{
+  return subscribe(()=>{
     // todo 在这里可以做diff,然后确定到底需要更新那个页面的那个部分
     // 此处有性能优化的两个点: 1.json-diff 2.不正在显示的页面不更新state
     const { getState } = Store;
@@ -71,8 +72,6 @@ function setSubscribe(options, config){
     config.states.forEach((s)=>{
       updateObj[s]=newState[s]
     });
-    // 此处的this实际上指向是 Page对象
-    console.log(this)
     this.setData(updateObj)
   });
 }
@@ -80,22 +79,30 @@ function setSubscribe(options, config){
 const _Page = Page;
 Page = (config) => {
   const newConfig = processNewConfig(config);
-  proxyPage(newConfig, 'onLoad', setSubscribe);
+  let unsubscribe=null;
+  proxyPage(newConfig, 'onLoad', function(options){ unsubscribe=setSubscribe.call(this,options,newConfig)});
+  if(getType(unsubscribe) === 'function'){
+    console.log('绑定函数');
+    proxyPage(newConfig, 'onUnload', unsubscribe());
+  }
   _Page(newConfig);
 };
 
 const _Component = Component;
 Component = (config) => {
   const newConfig = processNewConfig(config,true);
+  let unsubscribe=null;
   // todo 在页面和组件的卸载阶段需要将listen给去掉,防止无用的页面刷新
   if(newConfig.lifetimes){
-    // 注意这块this的绑定
-    proxyPage(newConfig.lifetimes, 'attached', function(options){setSubscribe.call(this,options,newConfig)});
+    proxyPage(newConfig.lifetimes, 'attached', function(options){unsubscribe=setSubscribe.call(this,options,newConfig)});
   }else {
-    // 加入自动化测试,方便测试写的逻辑没有问题
-    proxyPage(newConfig, 'attached', setSubscribe);
+    // todo 加入自动化测试,方便测试写的逻辑没有问题
+    proxyPage(newConfig, 'attached', function(options){unsubscribe=setSubscribe.call(this,options,newConfig)});
   }
-  console.log('newConfig',newConfig)
+  if(getType(unsubscribe) === 'function'){
+    console.log('绑定组件卸载函数');
+    proxyPage(newConfig, 'detached', unsubscribe());
+  }
   _Component(newConfig);
 };
 
